@@ -5,17 +5,17 @@ import "./Wallet.css";
 
 const Wallet = ({ saveState }) => {
   const [connected, setConnected] = useState(false);
+  const isAndroid = /android/i.test(navigator.userAgent);
   const init = async () => {
     try {
       const web3 = new Web3(window.ethereum);
       await window.ethereum.request({ method: "eth_requestAccounts" });
       const contract = new web3.eth.Contract(
-        ABI,  
+        ABI,
         "0xc6E21997d91D00677fE691Ce6cFAd387549688A5"
       );
       setConnected(true);
       saveState({ web3: web3, contract: contract });
-      
     } catch (error) {
       alert("Please Install Metamask");
     }
@@ -24,8 +24,15 @@ const Wallet = ({ saveState }) => {
   return (
     <>
       <div className="header">
+        {isAndroid && (
+          <button className="connectBTN">
+            <a href="https://anish03-portfolio.netlify.app/">
+              Click For Mobile
+            </a>
+          </button>
+        )}
         <button className="connectBTN" onClick={init} disabled={connected}>
-          {!connected ? "Connect Metamask": "Connected"}
+          {!connected ? "Connect Metamask" : "Connected"}
         </button>
       </div>
     </>
